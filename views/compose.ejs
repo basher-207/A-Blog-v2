@@ -1,0 +1,14 @@
+<%- include("header") %>
+
+<form action="/compose" class="compose-form" method="post">
+
+    <label for="Title" class="label-compose"><h3 class="label-compose">Title:</h3></label>
+    <input type="text" class="compose-input text-input" name="titleInput" id="Title" maxlength="30" placeholder="Title" required minlength="3" size="30"> 
+
+    <label for="Content" class="label-compose"><h3 class="label-compose">Content:</h3></label>
+    <textarea class="compose-input textarea-input" name="contentInput" id="Content" maxlength="300" cols="30" rows="10" required placeholder="Content..."></textarea>
+
+    <button class="button-compose" type="submit"><h3 class="button-compose-h3">Add new post!</h3></button>
+</form>
+
+<%- include("footer") %>

@@ -1,0 +1,20 @@
+<%- include("header") %>
+
+    <div class="chapter">
+        <h3 class="title"><%= chapter.title %></h3>
+        <p class="content"><%= chapter.content %></p>
+        <div class="chapter-buttons-box">
+            <form action="/posts/settings/Edit" method="post">
+                <input type="hidden" name="index" value="<%= chapter._id %>">
+                <button class="button-compose"><h3 class="button-compose-h3">Edit</h3></button>
+            </form>
+                
+            <form action="/posts/settings/Delete" method="post">
+                <input type="hidden" name="index" value="<%= chapter._id %>"> 
+                <button class="button-compose"><h3 class="button-compose-h3 del">Delete</h3></button>
+            </form>
+        </div>
+    </div>
+    
+
+<%- include("footer") %>

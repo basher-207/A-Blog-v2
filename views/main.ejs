@@ -1,0 +1,23 @@
+<%- include("header") %>
+
+
+<% for(let i = arr.length - 1; i >= 0; i--){ %>
+<% const index = i; %>
+<% const ID = arr[i]._id.toString(); %>
+
+<form action="/posts/<%= ID %>/<%= arr[i].title %>" method="get" class="chapter">
+    
+    <input type="hidden" name="chapterID" value="<%= ID %>">
+    
+    <button class="title-b" type="submit"><h3 class="title"><%= arr[i].title %></h3></button>
+
+    <% if(arr[i].content.length > 250){ %>
+        <p class="content"><%= arr[i].content.slice(0, 250) %>...</p>
+    <% }else{ %>
+        <p class="content"><%= arr[i].content %></p>
+    <% } %>
+
+</form>
+<% }; %>   
+
+<%- include("footer") %>
