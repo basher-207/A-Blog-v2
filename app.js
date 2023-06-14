@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const database = require(__dirname + "/modules/database.js"); //modules using database
 
 const app = express();
 
@@ -20,14 +21,7 @@ const Chapter = mongoose.model("Chapter", ChapterSchema);
 
 // MAIN PAGE
 app.get("/", (req, res)=>{
-
-    async function getChapters(){
-        const Chapters = await Chapter.find({}); //getting all chapters from "Chapters" collection
-
-        res.render("main", {arr: Chapters});
-    };
-
-    getChapters();
+    database.getChapters(Chapter, res, "main");
 });
 
 
@@ -35,39 +29,21 @@ app.get("/", (req, res)=>{
 app.get("/posts/:chapterId/:title", (req, res)=>{
     const ChapterID = req.params.chapterId;
 
-    async function getChapter(id){
-        const CurrentChapter = await Chapter.findById(id);
-
-        res.render("chapter", {chapter: CurrentChapter});
-    };
-
-    getChapter(ChapterID);
+    database.getChapter(Chapter, res, "chapter", ChapterID);
 });
 
 app.post("/posts/settings/:editOrDelete", (req, res)=>{
 
-    const ChapterId = req.body.index;
+    const ChapterID = req.body.index;
     const editOrDelete = req.params.editOrDelete;
 
     switch (editOrDelete) {
         case "Edit":
-            async function getChapter(id){
-                const CurrentChapter = await Chapter.findById(id);
-                res.render("edit", {chapter: CurrentChapter});
-            }
-
-            getChapter(ChapterId);
+            database.getChapter(Chapter, res, "edit", ChapterID);
             break;
-
         case "Delete":
-            async function deleteChapter(id){
-                await Chapter.findByIdAndDelete(id);
-                res.redirect("/");
-            }
-
-            deleteChapter(ChapterId);
+            database.deleteChapter(Chapter, res, "/", ChapterID);
             break;
-    
         default:
             console.log("Path is incorrect. Current rout: " + req.params.editOrDelete);
             break;
@@ -76,34 +52,17 @@ app.post("/posts/settings/:editOrDelete", (req, res)=>{
 
 app.post("/editing", (req, res)=>{
 
-    const Id = req.body.currentId
+    const ID = req.body.currentId;
     const NewTitle = req.body.titleInput;
     const NewContent = req.body.contentInput;
 
-    async function updateChapter(id, newTitle, newContent){
-        await Chapter.findByIdAndUpdate(id, {title: newTitle, content: newContent});
-        res.redirect("/");
-    };
-
-    updateChapter(Id, NewTitle, NewContent);
+    database.updateChapter(Chapter, res, "/", ID, NewTitle, NewContent);
 });
 
 
 // COMPOSE PAGE
 app.get("/compose", (req, res)=>{
-    async function composeValidation(){
-
-        const ChaptersArr = await Chapter.find({});
-        const NumberOfChapters = ChaptersArr.length;
-
-        if(NumberOfChapters >= 5){
-            res.render("compose-not");
-        }else{
-            res.render("compose");
-        }
-    }
-
-    composeValidation();
+    database.composeValidation(Chapter, res, "compose", "compose-not");
 });
 
 app.post("/compose", (req, res)=>{
@@ -111,8 +70,7 @@ app.post("/compose", (req, res)=>{
     const Title = req.body.titleInput;
     const Content = req.body.contentInput;
 
-    const NewChapter = new Chapter({title: Title, content: Content});
-    NewChapter.save();
+    database.addNewChapter(Chapter, Title, Content);
 
     res.redirect("/");
 });
