@@ -26,8 +26,8 @@ app.get("/", (req, res)=>{
 
 
 //CHAPTER PAGE
-app.get("/posts/:chapterId/:title", (req, res)=>{
-    const ChapterID = req.params.chapterId;
+app.get("/posts/:title", (req, res)=>{
+    const ChapterID = req.query.chapterID;
 
     database.getChapter(Chapter, res, "chapter", ChapterID);
 });
@@ -51,7 +51,7 @@ app.post("/posts/settings/:editOrDelete", (req, res)=>{
 });
 
 app.post("/editing", (req, res)=>{
-
+    
     const ID = req.body.currentId;
     const NewTitle = req.body.titleInput;
     const NewContent = req.body.contentInput;
@@ -61,12 +61,13 @@ app.post("/editing", (req, res)=>{
 
 
 // COMPOSE PAGE
-app.get("/compose", (req, res)=>{
+app.route("/compose")
+
+.get((req, res)=>{
     database.composeValidation(Chapter, res, "compose", "compose-not");
-});
+})
 
-app.post("/compose", (req, res)=>{
-
+.post((req, res)=>{
     const Title = req.body.titleInput;
     const Content = req.body.contentInput;
 
@@ -74,6 +75,7 @@ app.post("/compose", (req, res)=>{
 
     res.redirect("/");
 });
+
 
 
 //CONTACT PAGE

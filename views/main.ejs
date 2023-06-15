@@ -5,7 +5,7 @@
 <% const index = i; %>
 <% const ID = arr[i]._id.toString(); %>
 
-<form action="/posts/<%= ID %>/<%= arr[i].title %>" method="get" class="chapter">
+<form action="/posts/<%= arr[i].title %>" method="get" class="chapter">
     
     <input type="hidden" name="chapterID" value="<%= ID %>">
     
